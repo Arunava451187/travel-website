@@ -9,18 +9,18 @@ interface TripCardProps {
 }
 
 const TripCard: React.FC<TripCardProps> = ({ trip, onClick }) => {
-  const handleDetailsClick = (e: React.MouseEvent) => {
+  const handleWhatsAppRedirect = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const message = `Hello! I want more details about the ${trip.title} tour to ${trip.destination} for ₹${trip.price}. I saw the special offer for family & friends.`;
+    const message = `Hello! I'm interested in the ${trip.title} tour to ${trip.destination} priced at ₹${trip.price}. Please provide more details.`;
     window.open(`https://wa.me/918597504298?text=${encodeURIComponent(message)}`, "_blank");
   };
 
   return (
     <div 
       className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer border border-slate-100 flex flex-col h-full"
-      onClick={handleDetailsClick}
+      onClick={handleWhatsAppRedirect}
     >
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-64 sm:h-72 overflow-hidden">
         <img
           src={trip.image}
           alt={trip.title}
@@ -35,7 +35,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onClick }) => {
         <div className="absolute bottom-6 right-6 bg-indigo-600 text-white px-5 py-2 rounded-2xl text-lg font-black shadow-2xl">
           ₹{trip.price}
         </div>
-        {(trip.price <= 3000 || trip.id.includes('digha')) && (
+        {(trip.id === 'digha-1') && (
           <div className="absolute top-6 right-6 bg-rose-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black shadow-xl uppercase tracking-widest animate-pulse">
             Upcoming Tour
           </div>
@@ -66,7 +66,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onClick }) => {
           </div>
           
           <button 
-            onClick={handleDetailsClick}
+            onClick={handleWhatsAppRedirect}
             className="w-full bg-slate-900 group-hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center space-x-2 transition-all transform active:scale-95 shadow-xl hover:shadow-emerald-200"
           >
             <MessageCircle className="w-5 h-5" />

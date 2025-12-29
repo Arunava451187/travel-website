@@ -1,33 +1,22 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-// Always use process.env.API_KEY directly as a named parameter in the GoogleGenAI constructor.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-export const getTravelRecommendations = async (preferences: string) => {
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Suggest 3 luxury travel experiences specifically in Digha, Puri, Mandarmani, Darjeeling, or Purulia based on these preferences: ${preferences}. Format the output as a JSON array of objects with 'name', 'description', and 'reasoning' keys.`,
-      config: {
-        responseMimeType: "application/json"
-      }
-    });
-    
-    const jsonStr = response.text || '[]';
-    return JSON.parse(jsonStr);
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return [];
-  }
+// Use a getter to initialize AI only when called, preventing crashes if key is missing during startup
+const getAI = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) return null;
+  return new GoogleGenAI({ apiKey });
 };
 
 export const chatWithAssistant = async (history: { role: string, parts: { text: string }[] }[], message: string) => {
   try {
+    const ai = getAI();
+    if (!ai) return "Hello! I am ready to help you plan your Digha, Puri, or Darjeeling trip. Please contact our human concierge at +91 8597504298 for immediate assistance.";
+
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
-        systemInstruction: 'You are an elite travel concierge for DreamTrips, specializing EXCLUSIVELY in five destinations: Digha, Puri, Mandarmani, Darjeeling, and Purulia. You are knowledgeable about local traditions, best local foods (like Darjeeling momos or Puri khaja), specific travel logistics (like the best time to drive on Mandarmani beach), and hidden gems in the Ajodhya Hills of Purulia. Always be polite, sophisticated, and helpful. If a user asks about other places, gently steer them back to these five fantastic destinations.',
+        systemInstruction: 'You are an elite travel concierge for DreamTrips, specializing EXCLUSIVELY in five destinations: Digha, Puri, Mandarmani, Darjeeling, and Purulia. You are knowledgeable about local traditions and hidden gems. Always mention the special family and friends offers. Your manager is available at birbhumboy28@gmail.com or WhatsApp +91 8597504298.',
       }
     });
     
@@ -35,6 +24,6 @@ export const chatWithAssistant = async (history: { role: string, parts: { text: 
     return response.text;
   } catch (error) {
     console.error("Gemini Chat Error:", error);
-    return "I'm sorry, I'm having trouble connecting to my local travel database. How else can I assist you with your Digha, Puri, or Darjeeling plans?";
+    return "I'm having a little trouble thinking right now. Please message us on WhatsApp at 8597504298 for expert travel advice!";
   }
 };
