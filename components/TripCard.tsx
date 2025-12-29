@@ -11,7 +11,7 @@ interface TripCardProps {
 const TripCard: React.FC<TripCardProps> = ({ trip, onClick }) => {
   const handleDetailsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const message = `Hello! I'm interested in the ${trip.title} tour to ${trip.destination} for ₹${trip.price}. Please provide more details.`;
+    const message = `Hello! I want more details about the ${trip.title} tour to ${trip.destination} for ₹${trip.price}. I saw the special offer for family & friends.`;
     window.open(`https://wa.me/918597504298?text=${encodeURIComponent(message)}`, "_blank");
   };
 
@@ -35,7 +35,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onClick }) => {
         <div className="absolute bottom-6 right-6 bg-indigo-600 text-white px-5 py-2 rounded-2xl text-lg font-black shadow-2xl">
           ₹{trip.price}
         </div>
-        {trip.price <= 3000 && (
+        {(trip.price <= 3000 || trip.id.includes('digha')) && (
           <div className="absolute top-6 right-6 bg-rose-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black shadow-xl uppercase tracking-widest animate-pulse">
             Upcoming Tour
           </div>
