@@ -1,7 +1,0 @@
-{
-  "name": "DreamTrips - Luxury Travel Agency",
-  "description": "A comprehensive luxury travel booking platform with integrated AI travel assistance, admin dashboard, and booking management.",
-  "requestFramePermissions": [
-    "geolocation"
-  ]
-}
